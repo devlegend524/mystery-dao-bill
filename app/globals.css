@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica,;
+}
+.backgorundColor {
+  background:
+    radial-gradient(800px circle at center 10px, #180b39, #130829, #0f071f, 35%, transparent 51%),
+    radial-gradient(800px circle at right center,  #180b39, #130829, #0f071f, 36%, transparent 50.4%),
+    radial-gradient(1400px circle at 20px bottom, #311d66, #2c1755, #1f0f3d, 36%, transparent 51%);
+  background-color: #000000;
+}
+.cardBg {
+  background: 
+    radial-gradient(500px circle at center 90px, #1a2845, #0f1629, #10091b, #10091b,#170a29,#130822, #08040e, 65%, transparent 51%);
+}
