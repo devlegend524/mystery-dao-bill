@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cairoPlay.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cairoPlay.variable} antialiased min-h-screen backgorundColor`}
       >
         {children}
       </body>
