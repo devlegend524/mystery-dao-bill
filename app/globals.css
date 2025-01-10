@@ -17,16 +17,131 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica,;
+  font-family: Arial, Helvetica;
 }
 .backgorundColor {
-  background:
-    radial-gradient(800px circle at center 10px, #180b39, #130829, #0f071f, 35%, transparent 51%),
-    radial-gradient(800px circle at right center,  #180b39, #130829, #0f071f, 36%, transparent 50.4%),
-    radial-gradient(1400px circle at 20px bottom, #311d66, #2c1755, #1f0f3d, 36%, transparent 51%);
+  background: radial-gradient(
+      800px circle at center 10px,
+      #180b39,
+      #130829,
+      #0f071f,
+      35%,
+      transparent 51%
+    ),
+    radial-gradient(
+      800px circle at right center,
+      #180b39,
+      #130829,
+      #0f071f,
+      36%,
+      transparent 50.4%
+    ),
+    radial-gradient(
+      1400px circle at 20px bottom,
+      #311d66,
+      #2c1755,
+      #1f0f3d,
+      36%,
+      transparent 51%
+    );
   background-color: #000000;
 }
 .cardBg {
-  background: 
-    radial-gradient(500px circle at center 90px, #1a2845, #0f1629, #10091b, #10091b,#170a29,#130822, #08040e, 65%, transparent 51%);
+  background: radial-gradient(
+    500px circle at center 90px,
+    #1a2845,
+    #0f1629,
+    #10091b,
+    #10091b,
+    #170a29,
+    #130822,
+    #08040e,
+    65%,
+    transparent 51%
+  );
+}
+
+.nav_list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav_list .list_item a {
+  display: block;
+  font-size: 17px;
+  font-style: normal;
+  position: relative;
+}
+.nav_list .active {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-decoration: none;
+  @apply bg-gradient-to-l from-[#4d1f8d] via-[#7c70c7] to-[#6051e7] py-2 px-4 rounded-lg shadow-md;
+  position: relative;
+  overflow: visible;
+}
+.nav_list .list_item:hover {
+  padding-top: 0.5rem /* 4px */;
+  padding-bottom: 0.5rem /* 4px */;
+  border-radius: 0.5rem /* 8px */;
+  background-color: #6b21a8;
+}
+
+.main_btn {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-decoration: none;
+  @apply bg-gradient-to-l from-[#4d1f8d] via-[#7c70c7] to-[#6051e7] py-2 px-4 rounded-lg shadow-md;
+  position: relative;
+  overflow: visible;
+}
+.mobile_navbar {
+  width: 100%;
+}
+
+.mobile_navbar .nav_list {
+  display: block;
+  width: 100%;
+}
+
+.mobile_navbar .nav_list .list_item {
+  padding: 0;
+}
+
+.mobile_navbar .nav_list .list_item a {
+  padding: 15px;
+  line-height: 40px;
+}
+::-webkit-scrollbar {
+  @apply w-1 rounded-full;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-white/20;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#6b21a8];
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-black/40;
+}
+.nav_action {
+  @apply flex justify-end items-center;
+}
+
+.nav_action button {
+  @apply ml-4;
+}
+
+.nav_action button img {
+  @apply w-[40px] h-[40px];
+}
+
+.nav_action .btn_connect {
+  @apply w-[156px] h-[40px] rounded-full text-black;
 }

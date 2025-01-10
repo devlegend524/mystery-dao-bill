@@ -5,7 +5,7 @@ import Status from "./components/status";
 export default function Staking() {
   return (
     <div className=" text-white p-8">
-      <h1 className="text-6xl font-bold text-center m-10 p-2">HOME</h1>
+      <h1 className="text-6xl font-bold text-center m-10 p-2">BiLL HUB</h1>
 
       <div className="grid gap-6 max-w-6xl mx-auto">
         <Status />
