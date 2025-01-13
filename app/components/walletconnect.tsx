@@ -93,7 +93,7 @@ export const WalletConnect = () => {
                     </div>
                     <button
                       onClick={openAccountModal}
-                      className="m-2 sm:m-0 main_btn px-5 py-1transition py-1.5 ease-in-out flex justify-center items-center gap-1"
+                      className="m-2 sm:m-0 main_btn px-5 rounded-xl py-1transition py-1.5 ease-in-out flex justify-center items-center gap-1"
                       type="button"
                     >
                       {account.displayName}
