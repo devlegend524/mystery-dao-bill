@@ -145,3 +145,7 @@ body {
 .nav_action .btn_connect {
   @apply w-[156px] h-[40px] rounded-full text-black;
 }
+
+.bg-secondary {
+  @apply bg-gradient-to-l from-[#1e0e34] to-[#0d0417] rounded-xl text-center shadow-lg border-2 border-purple-500;
+}

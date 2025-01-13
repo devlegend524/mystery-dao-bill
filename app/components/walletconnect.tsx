@@ -59,39 +59,47 @@ export const WalletConnect = () => {
                 );
               }
               return (
-                <div className="flex items-center">
-                  <button
-                    onClick={openChainModal}
-                    className="inline-flex justify-center snow_effect_chain items-center rounded-full  transition ease-in-out text-black text-xl mr-1"
-                  >
-                    {chain.iconUrl ? (
-                      <Image
-                        alt={chain.name ?? "Chain icon"}
-                        src={chain.iconUrl}
-                        width={30}
-                        height={30}
-                      />
-                    ) : (
-                      <Image
-                        alt={chain.name ?? "Chain icon"}
-                        src="/logo.png"
-                        width={30}
-                        height={30}
-                      />
-                    )}
-                  </button>
-                  <div className="hidden sm:inline-block text-sm font-light">
-                    {nFormatter(Number(account.balanceFormatted), 4)}
-                    <span className="text-[10px]">&nbsp;( {chain.name} )</span>
+                <div className="flex items-center gap-2">
+                  <div className="flex justify-center items-center p-1 gap-1 bg-secondary">
+                    <button
+                      onClick={openChainModal}
+                      className="inline-flex justify-center snow_effect_chain items-center rounded-full  transition ease-in-out text-white text-md mr-1"
+                    >
+                      {chain.iconUrl ? (
+                        <Image
+                          alt={chain.name ?? "Chain icon"}
+                          src={chain.iconUrl}
+                          width={30}
+                          height={30}
+                        />
+                      ) : (
+                        <Image
+                          alt={chain.name ?? "Chain icon"}
+                          src="/logo.png"
+                          width={30}
+                          height={30}
+                        />
+                      )}
+                      {chain.name}
+                      <FaAngleDown className="text-xl" />
+                    </button>
                   </div>
-                  <button
-                    onClick={openAccountModal}
-                    className="m-2 sm:m-0 main_btn px-5 py-1transition py-1.5 ease-in-out flex justify-center items-center gap-1"
-                    type="button"
-                  >
-                    {account.displayName}
-                    <FaAngleDown className="text-xl" />
-                  </button>
+
+                  <div className="flex justify-center items-center p-1 bg-secondary">
+                    <div className="hidden sm:inline-block text-sm font-light">
+                      {account.displayBalance
+                        ? ` ${account.displayBalance}`
+                        : ""}
+                    </div>
+                    <button
+                      onClick={openAccountModal}
+                      className="m-2 sm:m-0 main_btn px-5 py-1transition py-1.5 ease-in-out flex justify-center items-center gap-1"
+                      type="button"
+                    >
+                      {account.displayName}
+                      <FaAngleDown className="text-xl" />
+                    </button>
+                  </div>
                 </div>
               );
             })()}
