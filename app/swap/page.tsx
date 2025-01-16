@@ -1,75 +1,364 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import RewardCard from "../components/rewardCard";
 import Status from "../components/status";
+import TokenSelectModal from "../components/TokenSelectModal";
+import useZap from "hooks/useZap";
+import { zapList } from "config/farms";
 
 export default function Staking() {
+  const [status, setStatus] = useState({
+    insufficientA: false,
+    insufficientB: false,
+    tokenA: false,
+    tokenB: false,
+    loading: false,
+    swap: false,
+    approve: false,
+  });
+
+  const [openA, setOpenA] = useState(false);
+  const [openB, setOpenB] = useState(false);
+  const [tokenA, setTokenA] = useState(zapList[1]);
+  const [tokenB, setTokenB] = useState(zapList[3]);
+  const [tokenAAllowance, setTokenAAllowance] = useState(0);
+  const [tokenAAmount, setTokenAAmount] = useState("");
+  const [tokenBAmount, setTokenBAmount] = useState("");
+  const [isCheckingAllowance, setIsCheckingAllowance] = useState(false);
+  const [pendingTx, setPendingTx] = useState(false);
+  const { onZap } = useZap();
+  const zapAddress = getZapAddress();
+  const [isApproving, setIsApproving] = useState(false);
+  const [updateBalance, setUpdateBalance] = useState(false);
+  const [pendingRefresh, setPendingRefresh] = useState(false);
+  const [isLoadingA, setIsLoadingA] = useState(false);
+  const [isLoadingB, setIsLoadingB] = useState(false);
+  const [tokenPriceA, setTokenPriceA] = useState(false);
+  const [tokenPriceB, setTokenPriceB] = useState(false);
+
+  const closeModalA = () => {
+    setOpenA(false);
+  };
+
+  const closeModalB = () => {
+    setOpenB(false);
+  };
+
+  const handleSetInsufficientA = (flag) => {
+    setStatus({ ...status, insufficientA: flag });
+  };
+
+  const handleSetInsufficientB = (flag) => {
+    setStatus({ ...status, insufficientB: flag });
+  };
+
+  const handleSetTokenAAvailable = (flag) => {
+    setStatus({ ...status, tokenA: flag });
+  };
+
+  const handleSetTokenBAvailable = (flag) => {
+    setStatus({ ...status, tokenB: flag });
+  };
+
+  const handleReverse = () => {
+    const tempTokenA = tokenA;
+    setTokenA(tokenB);
+    setTokenB(tempTokenA);
+    setTokenAAmount(tokenBAmount);
+    setTokenBAmount(0);
+    checkAllowance(tokenB, "A");
+  };
+
+  const handleSetTokenA = (val) => {
+    setTokenA(val);
+    checkAllowance(val, "A");
+  };
+
+  const handleSetTokenB = (val) => {
+    setTokenB(val);
+  };
+
+  const checkAllowance = async (token, type) => {
+    if (token.lpSymbol !== NATIVE_COIN_SYMBOL) {
+      setIsCheckingAllowance(true);
+      const res = await getAllowance(address, token, zapAddress, provider);
+      if (type === "A") {
+        setTokenAAllowance(res);
+      }
+      setIsCheckingAllowance(false);
+    } else {
+      setStatus({ ...status, insufficientA: true });
+    }
+  };
+
+  async function handleApprove() {
+    if (Number(tokenAAmount) <= 0) {
+      notify("error", "Please input the amount.");
+      return;
+    }
+
+    try {
+      if (Number(tokenAAllowance) < Number(tokenAAmount)) {
+        console.log("approving...");
+        setIsApproving(true);
+        let tokenContract;
+        if (tokenA.isTokenOnly) {
+          tokenContract = getErc20Contract(tokenA.lpAddresses, signer);
+        } else {
+          tokenContract = getLpContract(tokenA.lpAddresses, signer);
+        }
+        const tx = await tokenContract.approve(
+          zapAddress,
+          ethers.constants.MaxUint256,
+          { from: address }
+        );
+        await tx.wait();
+        setIsApproving(false);
+        checkAllowance(tokenA, "A");
+      }
+    } catch (e) {
+      if (didUserReject(e)) {
+        notify("error", "User rejected transaction");
+      } else {
+        notify("error", e.reason);
+      }
+      setIsApproving(false);
+    }
+  }
+
+  async function handleDeposit() {
+    if (tokenA === tokenB || !tokenAAmount) return;
+    try {
+      setPendingTx(true);
+      await onZap(
+        tokenA.lpAddresses,
+        tokenA.lpSymbol === NATIVE_COIN_SYMBOL ? true : false,
+        fromReadableAmount(Number(tokenAAmount)),
+        tokenB.lpAddresses,
+        tokenB.lpSymbol === NATIVE_COIN_SYMBOL ? true : false
+      );
+      refreshData();
+      setPendingTx(false);
+    } catch (e) {
+      console.log(e);
+      if (didUserReject(e)) {
+        notify("error", "User rejected transaction");
+      } else {
+        notify("error", e.reason);
+      }
+      setPendingTx(false);
+    }
+  }
+
+  const refreshData = () => {
+    setPendingRefresh(true);
+    setTokenAAmount("");
+    setUpdateBalance(true);
+    checkAllowance(tokenA, "A");
+    setTimeout(() => {
+      setPendingRefresh(false);
+    }, 500);
+  };
+
+  const getTokenPrice = async (token) => {
+    if (token.symbol === "DAI") return 1;
+    try {
+      const returned = await (
+        await fetch(
+          `https://api.dexscreener.com/latest/dex/tokens/${token.lpAddresses}`
+        )
+      ).json();
+
+      if (returned && returned.pairs) {
+        const correctPair = returned.pairs.filter(
+          (pair) => pair.chainId === "pulsechain" && pair.dexId === "pulsex"
+        );
+        return correctPair[0]?.priceUsd;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const getLpTokenPrice = async (token) => {
+    try {
+      const lpContract = getLpContract(tokenA.lpAddresses, provider);
+      const lpBalance = await lpContract.totalSupply();
+      const totalSupply = toReadableAmount(lpBalance, 18, 4);
+      const returned = await (
+        await fetch(
+          `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${token.lpAddresses}`
+        )
+      ).json();
+
+      if (returned && returned.pairs) {
+        const correctPair = returned.pairs[0];
+        const lpPrice = Number(
+          Number(correctPair?.marketCap) / Number(totalSupply)
+        ).toFixed(5);
+        return lpPrice;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const estimateOutput = async (type, amount) => {
+    if (type === "A") {
+      setIsLoadingB(true);
+    } else {
+      setIsLoadingA(true);
+    }
+    let tokenAPrice;
+    let tokenBPrice;
+    let estimated;
+    if (tokenA.isTokenOnly) {
+      tokenAPrice = await getTokenPrice(tokenA);
+    } else {
+      tokenAPrice = await getLpTokenPrice(tokenA);
+    }
+    if (tokenB.isTokenOnly) {
+      tokenBPrice = await getTokenPrice(tokenB);
+    } else {
+      tokenBPrice = await getLpTokenPrice(tokenB);
+    }
+
+    if (type === "A") {
+      estimated = Number((amount * tokenAPrice) / tokenBPrice).toFixed(2);
+      setTokenPriceA(tokenAPrice);
+      setTokenPriceB(tokenBPrice);
+      setTokenBAmount(estimated);
+      setIsLoadingB(false);
+    } else {
+      estimated = Number((amount * tokenBPrice) / tokenAPrice).toFixed(2);
+      setTokenPriceA(tokenAPrice);
+      setTokenPriceB(tokenBPrice);
+      setTokenAAmount(estimated);
+      setIsLoadingA(false);
+    }
+  };
   return (
     <div className="min-h-screen backgorundColor text-white p-8">
       <h1 className="text-6xl font-bold text-center m-10 p-2">SWAP</h1>
 
-      <div className="grid gap-6 max-w-6xl mx-auto">
-        <Status />
-
-        {/* Action Buttons */}
-        <div className="flex justify-between items-center bg-gradient-to-l from-[#1e0e34] via-black-950 to-[#0d0417] my-2 p-6 rounded-3xl text-center shadow-lg border-2 border-purple-500">
-          <p className="text-left pl-8">
-            STAKED: 4 TIMES | REWARDS: 2 UNLOCKED
-          </p>
-          <hr className="lg:w-80 h-1 bg-gradient-to-l from-purple-900 to-purple-100 border-0 rounded dark:bg-gray-900" />
-          <button className="bg-gradient-to-l from-[#4d1f8d] via-[#7c70c7] to-[#6051e7] hover:bg-purple-800 py-1 px-4 rounded-lg shadow-md">
-            Withdrawals
-          </button>
-        </div>
-
+      <div className="grid gap-6 max-w-2xl mx-auto">
         {/* Investment Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Investment Card */}
-          <div className="bg-gradient-to-b from-[#5f36ac] to-[#0f0617] p-6 rounded-3xl shadow-md border-2 border-purple-500 text-sm">
-            <div className="flex justify-between my-2">
-              <div>
-                <p className="text-lg">INVEST AND GET</p>
-                <p className="text-3xl font-bold p-2">6%</p>
-                <p className="text-lg">EVERY 7 DAYS</p>
+        {/* Investment Card */}
+        <div className="bg-gradient-to-b from-[#5f36ac] to-[#0f0617] p-6 rounded-3xl shadow-md border-2 border-purple-500 text-sm">
+          <div className="flex justify-between items-center">
+            <div className="flex-1"></div>
+            <div className="flex-1 flex justify-center items-center">
+              <div className="block">
+                <h1 className="text-center text-2xl font-semibold">Zapper</h1>
               </div>
-              <img src="/images/logos/invest.png" alt="icon" />
             </div>
-            <div className="my-4">
-              <p className="flex text-2xl font-bold bg-[#07040d] p-2 rounded-xl shadow-md">
-                <img src="/images/logos/usdc.png" alt="icon" />
-                <input
-                  type="text"
-                  min="15"
-                  max="10000"
-                  placeholder="300.23"
-                  className="w-full text-white bg-[#07040d] px-4 focus:outline-none"
+            <div className="flex-1 flex justify-end items-center">
+              <button
+                className="bg-black/20 rounded-full p-2 shadow-md hover:bg-primary/40 transition ease-in-out"
+                onClick={refreshData}
+              >
+                <img
+                  src="/images/refresh.png"
+                  alt=""
+                  className={`${pendingRefresh && "animate-spin"}`}
                 />
-                <button className="text-sm">Max</button>
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <button className="bg-[#311c54] hover:bg-purple-800 border-2 border-sky-50 focus:border-sky-800 p-1 rounded-lg shadow-md w-full">
-                28 DAYS
               </button>
-              <button className="bg-[#311c54] hover:bg-purple-800 border-2 border-sky-50 focus:border-sky-800 p-1 rounded-lg shadow-md w-full">
-                90 DAYS
-              </button>
-            </div>
-            <button className="bg-[#8646df] hover:bg-purple-800 py-2 px-4 rounded-lg shadow-md my-4 w-full">
-              Stake Now
-            </button>
-            <div className="flex justify-between mt-2">
-              <p>Min Investment:</p>
-              <p className="base">$15</p>
-            </div>
-            <div className="flex justify-between text-sm mt-2">
-              <p>Max Investment:</p>
-              <p className="base">$10K</p>
             </div>
           </div>
+          <p className="text-center text-gray-400 py-3">
+            Swap Anything to Anything
+          </p>
+          <div className="block">
+            <TokenSelect
+              type="A"
+              token={tokenA}
+              selectOnly={false}
+              amount={tokenAAmount}
+              setOpen={setOpenA}
+              setAmount={setTokenAAmount}
+              setStates={handleSetTokenAAvailable}
+              setInsufficient={handleSetInsufficientA}
+              updateBalance={updateBalance}
+              insufficient={status?.insufficientA}
+              estimateOutput={estimateOutput}
+              isLoading={isLoadingA}
+              tokenPrice={tokenPriceA}
+            />
 
-          <RewardCard />
+            <div className="flex justify-center items-center h-[26px] relative">
+              <div className="p-2 bg-[#457081] rounded-full scale-125 z-20 absolute">
+                <button
+                  onClick={handleReverse}
+                  className="transition ease-in-out flex justify-center items-center bg-primary/30 rounded-full p-1"
+                >
+                  <MdOutlineSwapCalls className="text-xl hover:rotate-180  duration-300" />
+                </button>
+              </div>
+            </div>
+
+            <TokenSelect
+              type="B"
+              selectOnly={true}
+              token={tokenB}
+              amount={tokenBAmount}
+              setOpen={setOpenB}
+              setAmount={setTokenBAmount}
+              setStates={handleSetTokenBAvailable}
+              setInsufficient={handleSetInsufficientB}
+              updateBalance={updateBalance}
+              insufficient={status?.insufficientB}
+              estimateOutput={estimateOutput}
+              isLoading={isLoadingB}
+              tokenPrice={tokenPriceB}
+            />
+            {isCheckingAllowance ? (
+              <button className="main_btn mt-8 hover:bg-symbolHover  flex justify-center disabled:opacity-50 disabled:hover:scale-100  w-full rounded-lg transition ease-in-out p-[8px] bg-secondary-700">
+                <Loading size="2xl" />
+              </button>
+            ) : (tokenA.lpSymbol !== NATIVE_COIN_SYMBOL &&
+                Number(tokenAAllowance) === 0) ||
+              (tokenA.lpSymbol !== NATIVE_COIN_SYMBOL &&
+                Number(tokenAAllowance) < Number(tokenAAmount)) ? (
+              <button
+                onClick={handleApprove}
+                disabled={isApproving}
+                className="main_btn mt-8 hover:bg-symbolHover disabled:opacity-50 disabled:hover:scale-100  w-full rounded-lg transition ease-in-out p-[8px] bg-secondary-700"
+              >
+                Approve
+              </button>
+            ) : (
+              <button
+                onClick={handleDeposit}
+                disabled={
+                  (tokenA.lpSymbol !== NATIVE_COIN_SYMBOL &&
+                    Number(tokenAAllowance) < Number(tokenAAmount)) ||
+                  status.insufficientA ||
+                  pendingTx ||
+                  isApproving
+                }
+                className="main_btn mt-8 hover:bg-symbolHover disabled:opacity-50 disabled:hover:scale-100  w-full rounded-lg transition ease-in-out p-[8px] bg-secondary-700"
+              >
+                {`Swap ${tokenA.lpSymbol} into ${tokenB.lpSymbol}`}
+              </button>
+            )}
+          </div>
         </div>
       </div>
+      <TokenSelectModal
+        open={openA}
+        closeModal={closeModalA}
+        setToken={handleSetTokenA}
+        disabledToken={tokenB?.lpSymbol}
+        tokens={zapList}
+      />
+      <TokenSelectModal
+        open={openB}
+        closeModal={closeModalB}
+        setToken={handleSetTokenB}
+        disabledToken={tokenA?.lpSymbol}
+        tokens={zapList}
+      />
+      {pendingTx && <LogoLoading title="Zapping..." />}
+      {isApproving && <LogoLoading title="Approving..." />}
     </div>
   );
 }

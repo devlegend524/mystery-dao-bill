@@ -20,3 +20,5 @@ export const routes = [
     url: "/bridge",
   },
 ];
+export const NATIVE_COIN_SYMBOL = "PLS";
+export const DEFAULT_GAS_PRICE = 2;
