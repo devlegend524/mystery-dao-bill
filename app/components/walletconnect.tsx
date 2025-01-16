@@ -1,7 +1,6 @@
 "use client";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FaAngleDown } from "react-icons/fa";
-import { nFormatter } from "../utils";
 import Image from "next/image";
 export const WalletConnect = () => {
   return (

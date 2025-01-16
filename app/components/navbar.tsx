@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Fade as Hamburger } from "hamburger-react";
 import { WalletConnect } from "./walletconnect";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { routes } from "../configs";
+
 const Navbar = () => {
   const [isMobile, setMobile] = useState(false);
   const [scrollHeader, setScrollHeader] = useState(false);
