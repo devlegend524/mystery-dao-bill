@@ -1,12 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import RewardCard from "../components/rewardCard";
-import Status from "../components/status";
+import useZap from "../hooks/useZap";
+import { zapList, ZapTokenType } from "../configs/farms";
+import { getZapAddress } from "../utils/addressHelpers";
+import { NextComponentType } from "next";
+import { NATIVE_COIN_SYMBOL } from "../configs";
+import { getAllowance } from "../utils/contractHelpers";
+import { notify } from "../utils/toastHelper";
+import { MdOutlineSwapCalls } from "react-icons/md";
+import Loading from "../components/Loading";
+import LogoLoading from "../components/LogoLoading";
+import { getErc20Contract, getLpContract } from "../utils/contractHelpers";
+import { ethers } from "ethers";
+import { didUserReject, toReadableAmount, fromReadableAmount } from "../utils/customHelpers";
 import TokenSelectModal from "../components/TokenSelectModal";
-import useZap from "hooks/useZap";
-import { zapList } from "config/farms";
+import TokenSelect from "../components/TokenSelect";
 
-export default function Staking() {
+export default function Swap() {
   const [status, setStatus] = useState({
     insufficientA: false,
     insufficientB: false,
@@ -44,19 +54,19 @@ export default function Staking() {
     setOpenB(false);
   };
 
-  const handleSetInsufficientA = (flag) => {
+  const handleSetInsufficientA = (flag: boolean) => {
     setStatus({ ...status, insufficientA: flag });
   };
 
-  const handleSetInsufficientB = (flag) => {
+  const handleSetInsufficientB = (flag: boolean) => {
     setStatus({ ...status, insufficientB: flag });
   };
 
-  const handleSetTokenAAvailable = (flag) => {
+  const handleSetTokenAAvailable = (flag: boolean) => {
     setStatus({ ...status, tokenA: flag });
   };
 
-  const handleSetTokenBAvailable = (flag) => {
+  const handleSetTokenBAvailable = (flag: boolean) => {
     setStatus({ ...status, tokenB: flag });
   };
 
@@ -69,16 +79,16 @@ export default function Staking() {
     checkAllowance(tokenB, "A");
   };
 
-  const handleSetTokenA = (val) => {
+  const handleSetTokenA = (val: ZapTokenType) => {
     setTokenA(val);
     checkAllowance(val, "A");
   };
 
-  const handleSetTokenB = (val) => {
+  const handleSetTokenB = (val: ZapTokenType) => {
     setTokenB(val);
   };
 
-  const checkAllowance = async (token, type) => {
+  const checkAllowance = async (token: any, type:string) => {
     if (token.lpSymbol !== NATIVE_COIN_SYMBOL) {
       setIsCheckingAllowance(true);
       const res = await getAllowance(address, token, zapAddress, provider);
@@ -133,7 +143,7 @@ export default function Staking() {
       await onZap(
         tokenA.lpAddresses,
         tokenA.lpSymbol === NATIVE_COIN_SYMBOL ? true : false,
-        fromReadableAmount(Number(tokenAAmount)),
+        fromReadableAmount(Number(tokenAAmount), tokenA.decimals),
         tokenB.lpAddresses,
         tokenB.lpSymbol === NATIVE_COIN_SYMBOL ? true : false
       );
@@ -285,7 +295,7 @@ export default function Staking() {
             />
 
             <div className="flex justify-center items-center h-[26px] relative">
-              <div className="p-2 bg-[#457081] rounded-full scale-125 z-20 absolute">
+              <div className="p-2 bg-[#180b39] rounded-full scale-125 z-20 absolute">
                 <button
                   onClick={handleReverse}
                   className="transition ease-in-out flex justify-center items-center bg-primary/30 rounded-full p-1"

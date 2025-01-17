@@ -1,9 +1,18 @@
 import tokens from "./tokens";
 import addresses from "../constants/addresses";
-
+export interface ZapTokenType {
+    symbol: string,
+    decimals: number,
+    lpAddresses: string,
+    lpSymbol: string,
+    isTokenOnly: string,
+    logoA: string,
+    logoB: string | undefined,
+    tokenAAddress: string | undefined,
+    tokenBAddress: string | undefined,
+}
 export const zapList = [
     {
-      pid: 0,
       lpSymbol: tokens.snow.symbol,
       symbol: "TEST2",
       isTokenOnly: true,
@@ -12,7 +21,6 @@ export const zapList = [
       logoA: tokens.snow.logo,
     },
     {
-      pid: 0,
       lpSymbol: tokens.pls.symbol,
       symbol: "WPLS",
       isTokenOnly: true,
@@ -21,7 +29,6 @@ export const zapList = [
       logoA: tokens.pls.logo,
     },
     {
-      pid: 0,
       lpSymbol: tokens.wpls.symbol,
       symbol: "WPLS",
       isTokenOnly: true,
@@ -30,7 +37,6 @@ export const zapList = [
       logoA: tokens.wpls.logo,
     },
     {
-      pid: 0,
       lpSymbol: tokens.dai.symbol,
       symbol: "DAI",
       isTokenOnly: true,
@@ -39,7 +45,6 @@ export const zapList = [
       logoA: tokens.dai.logo,
     },
     {
-      pid: 1,
       lpSymbol: tokens.bill.symbol,
       symbol: "TEST1",
       isTokenOnly: true,
@@ -48,7 +53,6 @@ export const zapList = [
       logoA: tokens.bill.logo,
     },
     {
-      pid: 1,
       lpSymbol: "SNOW-WPLS",
       symbol: "TEST2",
       isTokenOnly: false,
@@ -60,7 +64,6 @@ export const zapList = [
       tokenBAddress: tokens.wpls.address,
     },
     {
-      pid: 1,
       lpSymbol: "BILL-WPLS",
       symbol: "TEST1",
       isTokenOnly: false,

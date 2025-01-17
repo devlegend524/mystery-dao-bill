@@ -13,7 +13,42 @@ import zapABI from "../configs/abis/zap.json";
 import { DEFAULT_GAS_PRICE } from "../configs";
 import {  Address } from "viem";
 // import { getSettings, getGasPriceInWei } from './settings'
-
+export const getAllowance = async (
+    address,
+    token,
+    router_address,
+    provider
+  ) => {
+    if (address && token && provider) {
+      try {
+        if (token.isTokenOnly) {
+          const contract = new ethers.Contract(
+            token.lpAddresses,
+            erc20Abi,
+            provider
+          );
+          const amount = (
+            await contract.allowance(address, router_address)
+          ).toString();
+          return amount;
+        } else {
+          const contract = new ethers.Contract(
+            token.lpAddresses,
+            lpTokenAbi,
+            provider
+          );
+          const amount = (
+            await contract.allowance(address, router_address)
+          ).toString();
+          return amount;
+        }
+      } catch (e) {
+        console.log(e);
+        return 0;
+      }
+    }
+  };
+  
 export const getDefaultGasPrice = () => {
   return DEFAULT_GAS_PRICE;
 };

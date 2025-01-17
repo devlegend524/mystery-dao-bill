@@ -149,3 +149,118 @@ body {
 .bg-secondary {
   @apply bg-gradient-to-l from-[#1e0e34] to-[#0d0417] rounded-xl text-center shadow-lg border-2 border-purple-500;
 }
+
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+/** Token Select **/
+
+.custom_input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 46px;
+  height: 60px;
+  padding-left: 10px;
+  padding-right: 32px;
+  background-color: rgb(0 0 0 / 0.3);
+}
+
+@media (max-width: 376px) {
+  .custom_input {
+    padding: 20px;
+  }
+
+  .custom_input input {
+    font-size: 18px !important;
+  }
+
+  .swap_btn_box::after,
+  .swap_btn_box::before {
+    height: 40px !important;
+  }
+
+  .swap_btn_box {
+    background-color: rgb(0 0 0 / 0.6);
+    height: 40px !important;
+  }
+
+  .swap_btn_box button img {
+    width: 1.5rem;
+  }
+}
+.custom_input .token_select {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.token_prices input {
+  @apply bg-transparent;
+  height: 32px;
+  font-size: 20px;
+  text-align: end;
+  color: #ffffff;
+  width: 100%;
+}
+
+.token_prices input:focus {
+  outline: unset;
+}
+
+.swap_btn_box {
+  width: 120px;
+  height: 50px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swap_btn_box2 {
+  width: 200px;
+  height: 50px;
+  background-color: rgb(0 0 0 / 0.6);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.swap_btn_box::after {
+  content: " ";
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: -25px !important;
+  border-radius: 30px;
+}
+
+.swap_btn_box2::after {
+  content: " ";
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: -25px !important;
+  border-radius: 30px;
+}
+
+.swap_btn_box::before {
+  content: " ";
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: -25px !important;
+  border-radius: 30px;
+}
+
+.swap_btn_box2::before {
+  content: " ";
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: -25px !important;
+  border-radius: 30px;
+}

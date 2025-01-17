@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useEthersProvider } from "hooks/useEthers";
+import { useState, useEffect } from "react";
+import { useEthersProvider } from "../hooks/useEthers";
 import { useAccount } from "wagmi";
-import { getBalance } from "utils/balanceHalper";
-import { toFixed } from "utils/customHelpers";
+import { getBalance } from "../utils/balanceHelper";
+import { toFixed } from "../utils/customHelpers";
 import { useDebounce } from "use-debounce";
 
 export default function TokenSelect({
@@ -12,6 +12,7 @@ export default function TokenSelect({
   setAmount,
   selectOnly,
   setStates,
+  updateBalance,
   amount,
   setInsufficient,
   insufficient,
@@ -100,7 +101,7 @@ export default function TokenSelect({
             onClick={() => {
               setOpen(true);
             }}
-            className="flex items-center gap-3 hover:bg-primary/30 transition ease-in-out rounded-full cursor-pointer p-2 bg-primary/20 min-w-max mr-2"
+            className="flex items-center gap-3 hover:bg-primary/30 transition ease-in-out rounded-full cursor-pointer p-2 cardBg min-w-max mr-2"
           >
             {token.isTokenOnly ? (
               <img
@@ -130,7 +131,7 @@ export default function TokenSelect({
           {!selectOnly && (
             <div
               onClick={handleMaxAmount}
-              className="bg-primary/20 shadow-md shadow-gray hover:bg-primary/30 rounded-md px-2 py-1 text-[12px] transition ease-in-out"
+              className="cardBg shadow-md shadow-gray hover:bg-primary/30 rounded-md px-2 py-1 text-[12px] transition ease-in-out"
             >
               max
             </div>
