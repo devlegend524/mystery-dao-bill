@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  pulsechain,
-  avalanche,
-  bsc,
-  base,
-  sonic,
-  mainnet,
-  sepolia,
-} from "wagmi/chains";
+
 const Chainlist = () => {
   return (
     <div>
