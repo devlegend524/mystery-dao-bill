@@ -45,7 +45,7 @@ export default function NFTSale() {
                 <NFTCard
                   tokenId={index + page}
                   key={index}
-                  index={index}
+                  myNFTID={index}
                   active={active}
                 />
               );
