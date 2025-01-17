@@ -60,7 +60,10 @@ body {
     transparent 51%
   );
 }
+.activeBg {
+  background-color: #170a29;
 
+}
 .nav_list {
   display: flex;
   align-items: center;

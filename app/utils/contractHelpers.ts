@@ -2,13 +2,14 @@ import { ContractInterface, ethers } from "ethers";
 // Addresses
 import {
   getZapAddress,
+  getNFTAddress
 } from "./addressHelpers";
 
 // ABI
 import erc20Abi from "../configs/abis/erc20.json";
 import lpTokenAbi from "../configs/abis/lpToken.json";
 import zapABI from "../configs/abis/zap.json";
-
+import nftAbi from '../configs/abis/nft.json'
 
 import { DEFAULT_GAS_PRICE } from "../configs";
 import {  Address } from "viem";
@@ -53,7 +54,7 @@ export const getDefaultGasPrice = () => {
   return DEFAULT_GAS_PRICE;
 };
 
-const getContract = (abi:ContractInterface, address:string, provider:ethers.providers.JsonRpcSigner | ethers.providers.JsonRpcProvider | undefined) => {
+const getContract = (abi:ContractInterface, address:string, provider:ethers.providers.JsonRpcSigner | ethers.providers.JsonRpcProvider | ethers.providers.FallbackProvider | undefined) => {
   return new ethers.Contract(address, abi, provider);
 };
 
@@ -69,3 +70,7 @@ export const getZapContract = (provider:ethers.providers.JsonRpcSigner | undefin
   return getContract(zapABI, getZapAddress(), provider);
 };
 
+export const getNFTContract = (provider: ethers.providers.JsonRpcProvider | ethers.providers.FallbackProvider | undefined) => {
+    return getContract(nftAbi, getNFTAddress(), provider);
+  };
+  

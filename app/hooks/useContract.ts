@@ -1,10 +1,14 @@
 import { useMemo } from "react";
-import { useEthersSigner } from "./useEthers";
+import { useEthersSigner, useEthersProvider } from "./useEthers";
 import {
   getErc20Contract,
   getZapContract,
+  getNFTContract
 } from "../utils/contractHelpers";
 import { Address } from "viem";
+import { useAccount } from "wagmi";
+import { CHAIN_ID } from "../configs";
+
 /**
  * Helper hooks to get specific contracts (by ABI)
  */
@@ -21,3 +25,17 @@ export const useZapContract = () => {
     [signer]
   );
 };
+
+export const useNFTContract = () => {
+    const signer = useEthersSigner();
+    const provider = useEthersProvider();
+    const { chain } = useAccount();
+    return useMemo(
+      () =>
+        chain &&
+        chain.id === CHAIN_ID &&
+        getNFTContract(provider),
+      [signer, chain]
+    );
+  };
+  
