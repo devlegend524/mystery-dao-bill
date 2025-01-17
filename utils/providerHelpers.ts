@@ -1,4 +1,4 @@
-import { CHAIN_ID } from "../configs";
+import { CHAIN_ID } from "@/configs";
 import { providers } from "ethers";
 import getRpcUrl from "./getRpcUrl";
 

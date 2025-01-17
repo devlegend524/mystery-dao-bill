@@ -1,12 +1,12 @@
-'use client'
+"use client";
 import React, { useState, useEffect } from "react";
-import { getBalance } from "../utils/balanceHelper";
+import { getBalance } from "@/utils/balanceHelper";
 import { ImSpinner9 } from "react-icons/im";
-import { useEthersProvider } from "../hooks/useEthers";
+import { useEthersProvider } from "@/hooks/useEthers";
 import { useAccount } from "wagmi";
-import { toFixed } from "../utils/customHelpers";
+import { toFixed } from "@/utils/customHelpers";
 
-const  TokenItem = ({ token, disabledToken, handleToken }) => {
+const TokenItem = ({ token, disabledToken, handleToken }) => {
   const provider = useEthersProvider();
   const { address } = useAccount();
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ const  TokenItem = ({ token, disabledToken, handleToken }) => {
         )}
       </li>
     </>
-  )
-}
+  );
+};
 
 export default TokenItem;

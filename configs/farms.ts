@@ -1,5 +1,5 @@
 import tokens from "./tokens";
-import addresses from "../constants/addresses";
+import addresses from "@/constants/addresses";
 export interface ZapTokenType {
     symbol: string,
     decimals: number,

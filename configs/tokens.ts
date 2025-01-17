@@ -1,4 +1,4 @@
-import addresses from "../constants/addresses";
+import addresses from "@/constants/addresses";
 import { NATIVE_COIN_SYMBOL } from "./index";
 
 const tokens = {

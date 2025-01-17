@@ -20,6 +20,7 @@ export const routes = [
     url: "/bridge",
   },
 ];
+export const AVAILABLE_CHAINS = ["Mainnet", "Pulsechain", "Avalanche", "BSC", "Base", "Sonic" ]
 export const NATIVE_COIN_SYMBOL = "PLS";
 export const DEFAULT_GAS_PRICE = 2;
 export const CHAIN_ID = 396;

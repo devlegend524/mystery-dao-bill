@@ -1,20 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import useZap from "../hooks/useZap";
-import { zapList, ZapTokenType } from "../configs/farms";
-import { getZapAddress } from "../utils/addressHelpers";
+import useZap from "@/hooks/useZap";
+import { zapList, ZapTokenType } from "@/configs/farms";
+import { getZapAddress } from "@/utils/addressHelpers";
 import { NextComponentType } from "next";
-import { NATIVE_COIN_SYMBOL } from "../configs";
-import { getAllowance } from "../utils/contractHelpers";
-import { notify } from "../utils/toastHelper";
+import { NATIVE_COIN_SYMBOL } from "@/configs";
+import { getAllowance } from "@/utils/contractHelpers";
+import { notify } from "@/utils/toastHelper";
 import { MdOutlineSwapCalls } from "react-icons/md";
-import Loading from "../components/Loading";
-import LogoLoading from "../components/LogoLoading";
-import { getErc20Contract, getLpContract } from "../utils/contractHelpers";
+import Loading from "@/components/Loading";
+import LogoLoading from "@/components/LogoLoading";
+import { getErc20Contract, getLpContract } from "@/utils/contractHelpers";
 import { ethers } from "ethers";
-import { didUserReject, toReadableAmount, fromReadableAmount } from "../utils/customHelpers";
-import TokenSelectModal from "../components/TokenSelectModal";
-import TokenSelect from "../components/TokenSelect";
+import {
+  didUserReject,
+  toReadableAmount,
+  fromReadableAmount,
+} from "@/utils/customHelpers";
+import TokenSelectModal from "@/components/TokenSelectModal";
+import TokenSelect from "@/components/TokenSelect";
 
 export default function Swap() {
   const [status, setStatus] = useState({
@@ -88,7 +92,7 @@ export default function Swap() {
     setTokenB(val);
   };
 
-  const checkAllowance = async (token: any, type:string) => {
+  const checkAllowance = async (token: any, type: string) => {
     if (token.lpSymbol !== NATIVE_COIN_SYMBOL) {
       setIsCheckingAllowance(true);
       const res = await getAllowance(address, token, zapAddress, provider);

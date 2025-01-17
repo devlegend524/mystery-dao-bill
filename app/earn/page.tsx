@@ -1,8 +1,8 @@
 import React from "react";
-import RewardCard from "../components/rewardCard";
-import Status from "../components/status";
+import RewardCard from "@/components/rewardCard";
+import Status from "@/components/States";
 
-export default function Staking() {
+export default function Earn() {
   return (
     <div className="min-h-screen backgorundColor text-white p-8">
       <h1 className="text-6xl font-bold text-center m-10 p-2">STAKING</h1>

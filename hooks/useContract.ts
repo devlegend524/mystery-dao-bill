@@ -4,10 +4,10 @@ import {
   getErc20Contract,
   getZapContract,
   getNFTContract
-} from "../utils/contractHelpers";
+} from "@/utils/contractHelpers";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
-import { CHAIN_ID } from "../configs";
+import { CHAIN_ID } from "@/configs";
 
 /**
  * Helper hooks to get specific contracts (by ABI)

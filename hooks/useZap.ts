@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { zap } from "../utils/callHelpers";
+import { zap } from "@/utils/callHelpers";
 import { useZapContract } from "./useContract";
 import { useAccount } from "wagmi";
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
-import { toReadableAmount, didUserReject } from "../utils/customHelpers";
-import { useNFTContract, useERC20 } from "../hooks/useContract";
-import LogoLoading from "../components/LogoLoading";
-import { notify } from "../utils/toastHelper";
+import { toReadableAmount, didUserReject } from "@/utils/customHelpers";
+import { useNFTContract, useERC20 } from "@/hooks/useContract";
+import LogoLoading from "./LogoLoading";
+import { notify } from "@/utils/toastHelper";
 import { FaCheck } from "react-icons/fa";
-import { getNFTContract } from "../utils/contractHelpers";
-import httpProvider from "../utils/providerHelpers";
+import { getNFTContract } from "@/utils/contractHelpers";
+import httpProvider from "@/utils/providerHelpers";
 
 export default function NFTCard({ tokenId, active, myNFTID }) {
   const myNFTContract = getNFTContract(httpProvider);

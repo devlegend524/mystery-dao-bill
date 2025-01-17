@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useEthersProvider } from "../hooks/useEthers";
+import { useEthersProvider } from "@/hooks/useEthers";
 import { useAccount } from "wagmi";
-import { getBalance } from "../utils/balanceHelper";
-import { toFixed } from "../utils/customHelpers";
+import { getBalance } from "@/utils/balanceHelper";
+import { toFixed } from "@/utils/customHelpers";
 import { useDebounce } from "use-debounce";
 
 export default function TokenSelect({

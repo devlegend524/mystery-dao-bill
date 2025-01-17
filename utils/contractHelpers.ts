@@ -6,12 +6,12 @@ import {
 } from "./addressHelpers";
 
 // ABI
-import erc20Abi from "../configs/abis/erc20.json";
-import lpTokenAbi from "../configs/abis/lpToken.json";
-import zapABI from "../configs/abis/zap.json";
-import nftAbi from '../configs/abis/nft.json'
+import erc20Abi from "@/configs/abis/erc20.json";
+import lpTokenAbi from "@/configs/abis/lpToken.json";
+import zapABI from "@/configs/abis/zap.json";
+import nftAbi from '@/configs/abis/nft.json'
 
-import { DEFAULT_GAS_PRICE } from "../configs";
+import { DEFAULT_GAS_PRICE } from "@/configs";
 import {  Address } from "viem";
 // import { getSettings, getGasPriceInWei } from './settings'
 export const getAllowance = async (

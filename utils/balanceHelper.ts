@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import lpTokenAbi from "../configs/abis/lpToken.json";
-import erc20ABI from "../configs/abis/erc20.json";
+import lpTokenAbi from "@/configs/abis/lpToken.json";
+import erc20ABI from "@/configs/abis/erc20.json";
 import { toReadableAmount } from "./customHelpers";
-import { NATIVE_COIN_SYMBOL } from "../configs";
+import { NATIVE_COIN_SYMBOL } from "@/configs";
 
 export async function getBalance(address: string, token: any, provider: ethers.providers.Provider) {
   if (!token || !address || !provider) return;

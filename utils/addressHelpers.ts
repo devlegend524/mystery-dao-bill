@@ -1,4 +1,4 @@
-import contractAddresses from "../constants/addresses";
+import contractAddresses from "@/constants/addresses";
 import {ethers} from 'ethers'
 
 export const getZapAddress = () : string => {

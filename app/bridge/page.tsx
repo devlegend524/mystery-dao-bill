@@ -1,5 +1,5 @@
 import React from "react";
-import Chainlist from "../components/chainlist";
+import Chainlist from "@/components/Chainlist";
 export default function Bridge() {
   return (
     <div className="min-h-screen backgorundColor text-white p-8">

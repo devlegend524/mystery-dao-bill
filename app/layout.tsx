@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Cairo_Play } from "next/font/google"; // Import Cairo Play properly
-import Navbar from "./components/navbar";
+import Navbar from "@/components/navbar";
 import "@rainbow-me/rainbowkit/styles.css";
 import "./globals.css";
 import { Providers } from "./providers";

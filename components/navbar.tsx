@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Fade as Hamburger } from "hamburger-react";
 import { WalletConnect } from "./walletconnect";
-import { routes } from "../configs";
+import { routes } from "@/configs";
 
 const Navbar = () => {
   const [isMobile, setMobile] = useState(false);

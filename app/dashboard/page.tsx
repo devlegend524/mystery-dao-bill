@@ -1,6 +1,6 @@
 import React from "react";
-import RewardCard from "../components/rewardCard";
-import Status from "../components/status";
+import RewardCard from "@/components/rewardCard";
+import Status from "@/components/States";
 
 export default function Staking() {
   return (
